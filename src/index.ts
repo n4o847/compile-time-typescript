@@ -36,14 +36,13 @@ export async function run(fileName: string, { stdin = process.stdin, stdout = pr
   const checker = program.getTypeChecker();
 
   function visit(node: ts.Node) {
-    if (ts.isTypeNode(node)) {
-      const type = checker.getTypeFromTypeNode(node);
-      if (node.getText() === `Main<Input>`) {
-        if (type.isStringLiteral()) {
-          stdout.write(type.value);
-        } else {
-          throw new Error(`type error: ${checker.typeToString(type)}`);
-        }
+    const symbol = checker.getSymbolAtLocation(node);
+    if (symbol && symbol.getName() === `Output`) {
+      const type = checker.getDeclaredTypeOfSymbol(symbol);
+      if (type.isStringLiteral()) {
+        stdout.write(type.value);
+      } else {
+        throw new Error(`type error: ${checker.typeToString(type)}`);
       }
     }
     node.forEachChild(visit);
