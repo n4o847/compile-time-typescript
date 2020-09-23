@@ -1,3 +1,3 @@
-type Main<Input extends string> = `Hello, ${Input}!`;
+type Main<Input extends string> = `Hello, ${Input}!\n`;
 
 export default Main;

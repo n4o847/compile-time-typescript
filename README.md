@@ -3,5 +3,6 @@
 ## Usage
 
 ```
-echo "world" | npx ts-node src examples/hello.ts
+$ echo -n "world" | npx ts-node src examples/hello.ts
+Hello, world!
 ```
