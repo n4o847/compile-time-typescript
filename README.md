@@ -21,6 +21,12 @@ Hello, world!
 $ npm test
 ```
 
+Specify directory:
+
+```shell
+$ npm test examples/atcoder
+```
+
 ## How it works
 
 We can write a program like this:
