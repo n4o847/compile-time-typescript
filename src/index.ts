@@ -2,19 +2,16 @@ import * as ts from 'typescript';
 import { promises as fs } from 'fs';
 import * as tmp from 'tmp-promise';
 import * as path from 'path';
-import { Readable, Writable } from 'stream';
 
 interface RunOptions {
-  stdin: Readable;
-  stdout: Writable;
+  input: Buffer;
 }
 
-export async function run(fileName: string, { stdin = process.stdin, stdout = process.stdout }: Partial<RunOptions> = {}) {
-  const bufferList = [];
-  for await (const chunk of stdin) {
-    bufferList.push(Buffer.from(chunk));
-  }
-  const inputBuffer = Buffer.concat(bufferList);
+interface RunResult {
+  output: Buffer;
+}
+
+export async function run(fileName: string, { input = Buffer.of() }: Partial<RunOptions> = {}): Promise<RunResult> {
   const { path: tmpDirPath } = await tmp.dir({ prefix: `compile-time-typescript` });
   const calleeFileName = `callee.ts`;
   const callerFileName = `caller.ts`;
@@ -22,7 +19,7 @@ export async function run(fileName: string, { stdin = process.stdin, stdout = pr
     fs.copyFile(fileName, path.join(tmpDirPath, calleeFileName)),
     fs.writeFile(path.join(tmpDirPath, callerFileName), `
       import Main from './${path.basename(calleeFileName, path.extname(calleeFileName))}';
-      type Input = ${JSON.stringify(inputBuffer.toString('binary'))};
+      type Input = ${JSON.stringify(input.toString('binary'))};
       type Output = Main<Input>;
     `),
   ]);
@@ -34,13 +31,14 @@ export async function run(fileName: string, { stdin = process.stdin, stdout = pr
   });
   const source = program.getSourceFile(path.join(tmpDirPath, callerFileName))!;
   const checker = program.getTypeChecker();
+  const outputList: Buffer[] = [];
 
   function visit(node: ts.Node) {
     const symbol = checker.getSymbolAtLocation(node);
     if (symbol && symbol.getName() === `Output`) {
       const type = checker.getDeclaredTypeOfSymbol(symbol);
       if (type.isStringLiteral()) {
-        stdout.write(type.value);
+        outputList.push(Buffer.from(type.value));
       } else {
         throw new Error(`type error: ${checker.typeToString(type)}`);
       }
@@ -54,6 +52,9 @@ export async function run(fileName: string, { stdin = process.stdin, stdout = pr
     fs.unlink(path.join(tmpDirPath, callerFileName)),
   ]);
   await fs.rmdir(tmpDirPath);
+  return {
+    output: Buffer.concat(outputList),
+  };
 }
 
 export async function main(...args: string[]) {
@@ -61,7 +62,13 @@ export async function main(...args: string[]) {
     throw new Error(`argument error`);
   }
   const fileName = args[0];
-  await run(fileName);
+  const bufferList = [];
+  for await (const chunk of process.stdin) {
+    bufferList.push(Buffer.from(chunk));
+  }
+  const input = Buffer.concat(bufferList);
+  const { output } = await run(fileName, { input });
+  process.stdout.write(output.toString());
 }
 
 if (require.main === module) {
