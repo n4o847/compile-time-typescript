@@ -3,7 +3,7 @@
 ## Install
 
 ```shell
-$ git clone https://github.com/n4o847/compile-time-typescript
+$ git clone https://github.com/n4o847/compile-time-typescript.git
 $ cd compile-time-typescript
 $ npm install
 ```
