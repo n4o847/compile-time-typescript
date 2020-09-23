@@ -1,6 +1,6 @@
 import { run } from '../src';
 
-describe(`mayfes2018-day1`, () => {
+describe(`hackathon2018`, () => {
   test(`example 1`, async () => {
     const { output } = await run(`examples/hackathon2018.ts`, {
       input: Buffer.from(`01234567898765432101234567898765432101234567898765432101234567898765432101234567898765432101234567898\n`),
