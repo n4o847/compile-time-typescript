@@ -28,8 +28,8 @@ type LessThanOrEqualTo<A extends string, B extends string>
   = ((...xs: CharToTuple<A>) => void) extends ((...xs: CharToTuple<B>) => void) ? 1 : 0;
 
 type Solve<S extends string, T extends string>
-  = T extends `${infer X}${infer Y}${infer Tail}`
-      ? { __rec: Solve<`${S}${LessThanOrEqualTo<X, Y>}`, `${Y}${Tail}`> }
+  = T extends `${infer X}${infer Y}${infer Tail}\n`
+      ? { __rec: Solve<`${S}${LessThanOrEqualTo<X, Y>}`, `${Y}${Tail}\n`> }
       : S;
 
 type Main<Input extends string> = Recurse<Solve<``, Input>>;
