@@ -1,4 +1,4 @@
-import { run } from "../src";
+import { run } from '../src';
 
 describe(`mayfes2018-day1`, () => {
   test(`example 1`, async () => {
