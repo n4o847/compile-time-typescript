@@ -73,6 +73,6 @@ export async function main(...args: string[]) {
 
 if (require.main === module) {
   main(...process.argv.slice(2)).catch((e) => {
-    console.log(e);
+    console.error(e);
   });
 }
