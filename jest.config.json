@@ -1,0 +1,10 @@
+{
+  "testMatch": [
+    "<rootDir>/src/**/__tests__/**/*.+(ts|js)",
+    "<rootDir>/src/**/?(*.)+(spec|test).+(ts|js)",
+    "<rootDir>/tests/**/*.+(ts|js)"
+  ],
+  "transform": {
+    "^.+\\.ts$": "ts-jest"
+  }
+}
