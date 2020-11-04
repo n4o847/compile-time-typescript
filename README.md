@@ -48,4 +48,4 @@ So the program must have a default export of a generic type that takes a type pa
 
 Then compile-time-typescript type-checks `caller.ts` and extracts the type information of `Output`.
 
-If `Output` is a string literal type, its content is printed. Otherwise, an error occurrs.
+If `Output` is a string literal type, its content is printed. Otherwise, an error occurs.
