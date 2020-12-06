@@ -10,13 +10,13 @@ $ npm install -g compile-time-typescript
 
 ## Usage
 
-```
+```shell
 $ ctts script.ts
 ```
 
 ## Examples
 
-There are several examples under `examples/`. For examples, `hello.ts`:
+There are several examples under `examples/`. For example, `hello.ts`:
 
 ```typescript
 type Main<Input extends string> = `Hello, ${Input}!\n`;
@@ -50,3 +50,7 @@ So the program must have a default export of a generic type that takes a type pa
 Then compile-time-typescript type-checks `caller.ts` and extracts the type information of `Output`.
 
 If `Output` is a string literal type, its content is printed. Otherwise, an error occurs.
+
+## Resources
+
+- [hakatashi/esolang-box](https://github.com/hakatashi/esolang-box) - Easy and standardized docker images for 200+ esoteric (and non-esoteric) languages.
