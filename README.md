@@ -1,33 +1,34 @@
 # compile-time-typescript
 
-## Install
+Enjoy type-level programming with TypeScript!
+
+## Installation
 
 ```shell
-$ git clone https://github.com/n4o847/compile-time-typescript.git
-$ cd compile-time-typescript
-$ npm install
+$ npm install -g compile-time-typescript
 ```
 
 ## Usage
 
+```
+$ ctts script.ts
+```
+
+## Examples
+
+There are several examples under `examples/`. For examples, `hello.ts`:
+
+```typescript
+type Main<Input extends string> = `Hello, ${Input}!\n`;
+export default Main;
+```
+
 ```shell
-$ echo -n "world" | npx ts-node src examples/hello.ts
+$ echo -n "world" | ctts hello.ts
 Hello, world!
 ```
 
-## Test
-
-```shell
-$ npm test
-```
-
-Specify directory:
-
-```shell
-$ npm test examples/atcoder
-```
-
-## How it works
+## How It Works
 
 We can write a program like this:
 
