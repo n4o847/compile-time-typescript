@@ -13,12 +13,10 @@ interface RunResult {
 
 export async function run(fileName: string, { input = Buffer.of() }: Partial<RunOptions> = {}): Promise<RunResult> {
   const { path: tmpDirPath } = await tmp.dir({ prefix: `compile-time-typescript` });
-  const calleeFileName = `callee.ts`;
   const callerFileName = `caller.ts`;
   await Promise.all([
-    fs.copyFile(fileName, path.join(tmpDirPath, calleeFileName)),
     fs.writeFile(path.join(tmpDirPath, callerFileName), `
-      import Main from './${path.basename(calleeFileName, path.extname(calleeFileName))}';
+      import Main from ${JSON.stringify(path.resolve(fileName).replace(/\.ts$/, ''))};
       type Input = ${JSON.stringify(input.toString('binary'))};
       type Output = Main<Input>;
     `),
@@ -48,7 +46,6 @@ export async function run(fileName: string, { input = Buffer.of() }: Partial<Run
 
   source.forEachChild(visit);
   await Promise.all([
-    fs.unlink(path.join(tmpDirPath, calleeFileName)),
     fs.unlink(path.join(tmpDirPath, callerFileName)),
   ]);
   await fs.rmdir(tmpDirPath);
