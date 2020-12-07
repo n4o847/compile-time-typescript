@@ -9,7 +9,7 @@ const argv = yargs(process.argv.slice(2))
   .string('_')
   .argv;
 
-export async function main() {
+async function main() {
   const fileName = argv._[0];
   const bufferList = [];
   for await (const chunk of process.stdin) {
