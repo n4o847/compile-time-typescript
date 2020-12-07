@@ -30,24 +30,17 @@ Hello, world!
 
 ## How It Works
 
-We can write a program like this:
+When `ctts script.ts` is executed, compile-time-typescript creates a caller like this:
 
 ```typescript
-type Main<Input extends string> = `Hello, ${Input}\n`;
-export default Main;
-```
-
-Compile-time-typescript saves the program as `callee.ts` and creates `caller.ts`:
-
-```typescript
-import Main from './callee';
+import Main from '/path/to/script';
 type Input = "HERE COMES THE INPUT";
 type Output = Main<Input>;
 ```
 
 So the program must have a default export of a generic type that takes a type parameter and constructs a string literal type.
 
-Then compile-time-typescript type-checks `caller.ts` and extracts the type information of `Output`.
+Then compile-time-typescript type-checks the caller and extracts the type information of `Output`.
 
 If `Output` is a string literal type, its content is printed. Otherwise, an error occurs.
 
