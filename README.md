@@ -1,6 +1,6 @@
 # compile-time-typescript
 
-Enjoy type-level programming with TypeScript!
+> Enjoy type-level programming with TypeScript!
 
 ## Installation
 
@@ -33,7 +33,7 @@ Hello, world!
 When `ctts script.ts` is executed, compile-time-typescript creates a caller like this:
 
 ```typescript
-import Main from '/path/to/script';
+import Main from "/path/to/script";
 type Input = "HERE COMES THE INPUT";
 type Output = Main<Input>;
 ```
