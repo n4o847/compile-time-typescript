@@ -1,4 +1,4 @@
-node_modules
-.vscode
-lib
-bin
+node_modules/
+.vscode/
+/lib/
+/bin/
