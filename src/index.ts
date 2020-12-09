@@ -1,9 +1,6 @@
 import * as ts from 'typescript';
-import { promises as fs } from 'fs';
 import * as tmp from 'tmp-promise';
 import * as path from 'path';
-
-tmp.setGracefulCleanup();
 
 interface RunOptions {
   input: Buffer;
@@ -14,19 +11,32 @@ interface RunResult {
 }
 
 export async function run(fileName: string, { input = Buffer.of() }: Partial<RunOptions> = {}): Promise<RunResult> {
-  const { path: callerFileName, cleanup } = await tmp.file({ prefix: `compile-time-typescript`, postfix: `caller.ts` });
-  await fs.writeFile(callerFileName, `
+  const callerFileName = await tmp.tmpName({ prefix: `compile-time-typescript`, postfix: `caller.ts` });
+  const callerSourceFile = ts.createSourceFile(callerFileName, `
     import Main from ${JSON.stringify(path.resolve(fileName).replace(/\.ts$/, ''))};
     type Input = ${JSON.stringify(input.toString('binary'))};
     type Output = Main<Input>;
-  `);
+  `, ts.ScriptTarget.Latest);
+
+  const defaultCompilerHost = ts.createCompilerHost({});
+  const customCompilerHost: ts.CompilerHost = {
+    ...defaultCompilerHost,
+    getSourceFile(fileName: string, languageVersion: ts.ScriptTarget, onError?: ((message: string) => void), shouldCreateNewSourceFile?: boolean): ts.SourceFile | undefined {
+      if (fileName === callerFileName) {
+        return callerSourceFile;
+      } else {
+        return defaultCompilerHost.getSourceFile.call(this, fileName, languageVersion, onError, shouldCreateNewSourceFile);
+      }
+    },
+  };
+
   const program = ts.createProgram({
     rootNames: [callerFileName],
     options: {
       strict: true,
     },
+    host: customCompilerHost,
   });
-  const source = program.getSourceFile(callerFileName)!;
   const checker = program.getTypeChecker();
   const outputList: Buffer[] = [];
 
@@ -43,8 +53,8 @@ export async function run(fileName: string, { input = Buffer.of() }: Partial<Run
     node.forEachChild(visit);
   }
 
-  source.forEachChild(visit);
-  await cleanup();
+  callerSourceFile.forEachChild(visit);
+
   return {
     output: Buffer.concat(outputList),
   };
