@@ -1,9 +1,11 @@
 import yargs from 'yargs/yargs';
+import * as ts from 'typescript';
+import pkg from '../../package.json';
 import { run } from '..';
 
 const argv = yargs(process.argv.slice(2))
   .usage(`Usage: $0 [options] script.ts`)
-  .version('v1.2.0')
+  .version(`${pkg.name} ${pkg.version}\ntypescript ${ts.version}`)
   .help()
   .demandCommand(1, 1)
   .string('_')
