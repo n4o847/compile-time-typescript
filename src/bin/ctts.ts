@@ -7,7 +7,7 @@ const argv = yargs(process.argv.slice(2))
   .help()
   .demandCommand(1, 1)
   .string('_')
-  .argv;
+  .parseSync();
 
 async function main() {
   const fileName = argv._[0];
