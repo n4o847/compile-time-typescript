@@ -1,6 +1,6 @@
 # compile-time-typescript
 
-> Enjoy type-level programming with TypeScript!
+Enjoy type-level programming with TypeScript!
 
 ## Installation
 
@@ -28,7 +28,7 @@ $ echo -n "world" | ctts hello.ts
 Hello, world!
 ```
 
-## How It Works
+## How it works
 
 When `ctts script.ts` is executed, compile-time-typescript creates a caller like this:
 
@@ -44,6 +44,10 @@ Then compile-time-typescript type-checks the caller and extracts the type inform
 
 If `Output` is a string literal type, its content is printed. Otherwise, an error occurs.
 
-## Resources
+## Where it is used
 
 - [hakatashi/esolang-box](https://github.com/hakatashi/esolang-box) - Easy and standardized docker images for 200+ esoteric (and non-esoteric) languages.
+
+## Resources
+
+- [型レベル TypeScript の esolang としての展望について - Qiita](https://qiita.com/n4o847/items/5fb8e1cfe0344eee599f)
