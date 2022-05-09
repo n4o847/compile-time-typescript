@@ -28,6 +28,14 @@ $ echo -n "world" | ctts hello.ts
 Hello, world!
 ```
 
+## Remarkable features of TypeScript
+
+- From TypeScript 4.1
+  - [Template Literal Types](https://devblogs.microsoft.com/typescript/announcing-typescript-4-1/#template-literal-types)
+  - [Recursive Conditional Types](https://devblogs.microsoft.com/typescript/announcing-typescript-4-1/#recursive-conditional-types)
+- From TypeScript 4.5
+  - [Tail-Recursion Elimination on Conditional Types](https://devblogs.microsoft.com/typescript/announcing-typescript-4-5/#tailrec-conditional)
+
 ## How it works
 
 When `ctts script.ts` is executed, compile-time-typescript creates a caller like this:
