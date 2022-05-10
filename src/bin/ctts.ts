@@ -3,7 +3,7 @@ import { run } from '..';
 
 const argv = yargs(process.argv.slice(2))
   .usage(`Usage: $0 [options] script.ts`)
-  .version('v1.2.0')
+  .version()
   .help()
   .demandCommand(1, 1)
   .string('_')
