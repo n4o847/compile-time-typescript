@@ -3,6 +3,8 @@ import { promises as fs } from 'fs';
 import * as tmp from 'tmp-promise';
 import * as path from 'path';
 
+tmp.setGracefulCleanup();
+
 interface RunOptions {
   input: Buffer;
 }
