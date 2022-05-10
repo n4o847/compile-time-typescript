@@ -12,24 +12,22 @@ interface RunResult {
 }
 
 export async function run(fileName: string, { input = Buffer.of() }: Partial<RunOptions> = {}): Promise<RunResult> {
-  const { path: tmpDirPath } = await tmp.dir({ prefix: `compile-time-typescript` });
-  const calleeFileName = `callee.ts`;
-  const callerFileName = `caller.ts`;
-  await Promise.all([
-    fs.copyFile(fileName, path.join(tmpDirPath, calleeFileName)),
-    fs.writeFile(path.join(tmpDirPath, callerFileName), `
-      import Main from './${path.basename(calleeFileName, path.extname(calleeFileName))}';
-      type Input = ${JSON.stringify(input.toString('binary'))};
-      type Output = Main<Input>;
-    `),
-  ]);
+  const calleePath = path.resolve(process.cwd(), fileName);
+  const calleePathParsed = path.parse(calleePath);
+  const calleePathWithoutExt = `${calleePathParsed.dir}${path.sep}${calleePathParsed.name}`;
+  const { path: callerPath, cleanup } = await tmp.file({ prefix: `compile-time-typescript`, postfix: `caller.ts` });
+  await fs.writeFile(callerPath, `
+    import Main from ${JSON.stringify(calleePathWithoutExt)};
+    type Input = ${JSON.stringify(input.toString('binary'))};
+    type Output = Main<Input>;
+  `);
   const program = ts.createProgram({
-    rootNames: [path.join(tmpDirPath, callerFileName)],
+    rootNames: [callerPath],
     options: {
       strict: true,
     },
   });
-  const source = program.getSourceFile(path.join(tmpDirPath, callerFileName))!;
+  const source = program.getSourceFile(callerPath)!;
   const checker = program.getTypeChecker();
   const outputList: Buffer[] = [];
 
@@ -47,11 +45,7 @@ export async function run(fileName: string, { input = Buffer.of() }: Partial<Run
   }
 
   source.forEachChild(visit);
-  await Promise.all([
-    fs.unlink(path.join(tmpDirPath, calleeFileName)),
-    fs.unlink(path.join(tmpDirPath, callerFileName)),
-  ]);
-  await fs.rmdir(tmpDirPath);
+  await cleanup();
   return {
     output: Buffer.concat(outputList),
   };
