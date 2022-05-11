@@ -61,3 +61,4 @@ If `Output` is a string literal type, its content is printed. Otherwise, an erro
 ## Resources
 
 - [型レベル TypeScript の esolang としての展望について - Qiita](https://qiita.com/n4o847/items/5fb8e1cfe0344eee599f)
+- [第7回Esolang Codegolf Contest Writeup · hakatashi/esolang-battle Wiki](https://github.com/hakatashi/esolang-battle/wiki/%E7%AC%AC7%E5%9B%9EEsolang-Codegolf-Contest-Writeup#compiletime-typescript-n4o847-154-bytes)
