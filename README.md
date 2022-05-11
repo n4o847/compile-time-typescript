@@ -35,6 +35,8 @@ Hello, world!
   - [Recursive Conditional Types](https://devblogs.microsoft.com/typescript/announcing-typescript-4-1/#recursive-conditional-types)
 - From TypeScript 4.5
   - [Tail-Recursion Elimination on Conditional Types](https://devblogs.microsoft.com/typescript/announcing-typescript-4-5/#tailrec-conditional)
+- From TypeScript 4.7 Beta
+  - [`extends` Constraints on `infer` Type Variables](https://devblogs.microsoft.com/typescript/announcing-typescript-4-7-beta/#extends-constraints-on-infer-type-variables)
 
 ## How it works
 
