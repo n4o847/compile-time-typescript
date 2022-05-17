@@ -33,22 +33,16 @@ type EncodeNatural<N extends string>
 ;
 
 type DecodeNatural<N extends Natural>
-  = DecodeNaturalRec<N> extends infer Result
-      ? Result extends string
-          ? Result extends ``
-              ? `0`
-              : Result
-          : never
+  = DecodeNaturalRec<N> extends infer Result extends string
+      ? Result extends ``
+          ? `0`
+          : Result
       : never
 ;
 
 type DecodeNaturalRec<N extends Natural>
-  = N extends [infer D, ...infer DS]
-      ? D extends Digit
-          ? DS extends Natural
-              ? `${DecodeNaturalRec<DS>}${DecodeDigit<D>}`
-              : never
-          : never
+  = N extends [infer D extends Digit, ...infer DS extends Natural]
+      ? `${DecodeNaturalRec<DS>}${DecodeDigit<D>}`
       : ``
 ;
 
@@ -89,24 +83,14 @@ type AddDigits<D0 extends Digit, D1 extends Digit, Carry extends Digit0 | Digit1
 ;
 
 type AddNaturals<N0 extends Natural, N1 extends Natural, C0 extends Digit0 | Digit1 = Digit0>
-  = N0 extends [infer D0, ...infer DS0]
-      ? D0 extends Digit
-          ? DS0 extends Natural
-              ? N1 extends [infer D1, ...infer DS1]
-                  ? D1 extends Digit
-                      ? DS1 extends Natural
-                          ? AddDigits<D0, D1, C0> extends [infer S0, infer C1]
-                              ? C1 extends Digit0 | Digit1
-                                  ? [S0, ...AddNaturals<DS0, DS1, C1>]
-                                  : never
-                              : never
-                          : never
-                      : never
-                  : C0 extends Digit1
-                      ? AddNaturals<N0, [C0]>
-                      : N0
+  = N0 extends [infer D0 extends Digit, ...infer DS0 extends Natural]
+      ? N1 extends [infer D1 extends Digit, ...infer DS1 extends Natural]
+          ? AddDigits<D0, D1, C0> extends [infer S0, infer C1 extends Digit0 | Digit1]
+              ? [S0, ...AddNaturals<DS0, DS1, C1>]
               : never
-          : never
+          : C0 extends Digit1
+              ? AddNaturals<N0, [C0]>
+              : N0
       : C0 extends Digit1
           ? AddNaturals<N1, [C0]>
           : N1
