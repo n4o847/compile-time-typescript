@@ -27,6 +27,7 @@
   "scripts": {
     "prepare": "webpack --mode=production",
     "start": "ts-node src",
+    "lint": "eslint src",
     "test": "jest"
   },
   "dependencies": {
