@@ -1,5 +1,5 @@
 import yargs from 'yargs/yargs';
-import * as ts from 'typescript';
+import ts from 'typescript';
 import pkg from '../../package.json';
 import { run } from '..';
 

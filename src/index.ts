@@ -1,4 +1,4 @@
-import * as ts from 'typescript';
+import ts from 'typescript';
 import * as tmp from 'tmp-promise';
 import * as path from 'path';
 
@@ -21,11 +21,12 @@ export async function run(fileName: string, { input = Buffer.of() }: Partial<Run
   const defaultCompilerHost = ts.createCompilerHost({});
   const customCompilerHost: ts.CompilerHost = {
     ...defaultCompilerHost,
-    getSourceFile(fileName: string, languageVersion: ts.ScriptTarget, onError?: ((message: string) => void), shouldCreateNewSourceFile?: boolean): ts.SourceFile | undefined {
+    getSourceFile(...args) {
+      const [fileName] = args;
       if (fileName === callerFileName) {
         return callerSourceFile;
       } else {
-        return defaultCompilerHost.getSourceFile.call(this, fileName, languageVersion, onError, shouldCreateNewSourceFile);
+        return defaultCompilerHost.getSourceFile.apply(this, args);
       }
     },
   };
