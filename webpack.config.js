@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
 
+/** @type { webpack.Configuration } */
 module.exports = {
   entry: {
     'lib/index': './src/index.ts',
@@ -8,6 +9,9 @@ module.exports = {
   },
   output: {
     path: __dirname,
+    library: {
+      type: 'commonjs2',
+    },
   },
   module: {
     rules: [
