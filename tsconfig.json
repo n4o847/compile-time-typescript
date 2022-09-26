@@ -1,8 +1,7 @@
 {
+  "extends": "@tsconfig/node14/tsconfig.json",
   "compilerOptions": {
-    "resolveJsonModule": true,
-    "strict": true,
-    "esModuleInterop": true
+    "resolveJsonModule": true
   },
   "include": ["src/**/*"]
 }
