@@ -3,15 +3,15 @@ import { run } from '../../src';
 describe(`esolang-battle/mayfes2018-day1`, () => {
   test(`example 1`, async () => {
     const { output } = await run(`examples/esolang-battle/mayfes2018-day1.ts`, {
-      input: Buffer.from(`AAAAAAAAAAAAAAAAAAAAAAAAAA\n`),
+      input: `AAAAAAAAAAAAAAAAAAAAAAAAAA\n`,
     });
-    expect(output.toString()).toBe(`BCDEFGHIJKLMNOPQRSTUVWXYZA`);
+    expect(output).toBe(`BCDEFGHIJKLMNOPQRSTUVWXYZA`);
   });
 
   test(`example 2`, async () => {
     const { output } = await run(`examples/esolang-battle/mayfes2018-day1.ts`, {
-      input: Buffer.from(`SFBMPCVCSHDKARZHSCTVXSYGST\n`),
+      input: `SFBMPCVCSHDKARZHSCTVXSYGST\n`,
     });
-    expect(output.toString()).toBe(`THEQUICKBROWNFOXJUMPSOVERT`);
+    expect(output).toBe(`THEQUICKBROWNFOXJUMPSOVERT`);
   });
 });

@@ -3,18 +3,18 @@ import * as tmp from 'tmp-promise';
 import * as path from 'path';
 
 interface RunOptions {
-  input: Buffer;
+  input: string;
 }
 
 interface RunResult {
-  output: Buffer;
+  output: string;
 }
 
-export async function run(fileName: string, { input = Buffer.of() }: Partial<RunOptions> = {}): Promise<RunResult> {
+export async function run(fileName: string, { input = "" }: Partial<RunOptions> = {}): Promise<RunResult> {
   const callerFileName = await tmp.tmpName({ prefix: `compile-time-typescript`, postfix: `caller.ts` });
   const callerSourceFile = ts.createSourceFile(callerFileName, `
     import Main from ${JSON.stringify(path.resolve(fileName).replace(/\.ts$/, ''))};
-    type Input = ${JSON.stringify(input.toString('binary'))};
+    type Input = ${JSON.stringify(input)};
     type Output = Main<Input>;
   `, ts.ScriptTarget.Latest);
 
@@ -39,14 +39,14 @@ export async function run(fileName: string, { input = Buffer.of() }: Partial<Run
     host: customCompilerHost,
   });
   const checker = program.getTypeChecker();
-  const outputList: Buffer[] = [];
+  const outputList: string[] = [];
 
   function visit(node: ts.Node) {
     const symbol = checker.getSymbolAtLocation(node);
     if (symbol && symbol.getName() === `Output`) {
       const type = checker.getDeclaredTypeOfSymbol(symbol);
       if (type.isStringLiteral()) {
-        outputList.push(Buffer.from(type.value));
+        outputList.push(type.value);
       } else {
         throw new Error(`type error: ${checker.typeToString(type)}`);
       }
@@ -57,6 +57,6 @@ export async function run(fileName: string, { input = Buffer.of() }: Partial<Run
   callerSourceFile.forEachChild(visit);
 
   return {
-    output: Buffer.concat(outputList),
+    output: outputList.join(""),
   };
 }

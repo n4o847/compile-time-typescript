@@ -17,7 +17,7 @@ async function main() {
   for await (const chunk of process.stdin) {
     bufferList.push(Buffer.from(chunk));
   }
-  const input = Buffer.concat(bufferList);
+  const input = Buffer.concat(bufferList).toString();
   const { output } = await run(fileName, { input });
   process.stdout.write(output.toString());
 }
