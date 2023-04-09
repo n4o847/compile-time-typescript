@@ -1,5 +1,7 @@
 # compile-time-typescript
 
+[![Node.js CI](https://github.com/n4o847/compile-time-typescript/actions/workflows/ci.yml/badge.svg)](https://github.com/n4o847/compile-time-typescript/actions/workflows/ci.yml)
+
 Enjoy type-level programming with TypeScript!
 
 ## Installation
